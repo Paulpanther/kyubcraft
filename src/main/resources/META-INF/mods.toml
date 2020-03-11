@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[30,)"
+
+[[mods]]
+modId="kyubcraft"
+version="${version}"
+displayName="KyubCraft"
+displayURL="http://paulmethfessel.com/kyubcraft"
+logoFile="kyubcraft.png"
+credits="Made with help from https://cadiboo.github.io/tutorials/1.15.1"
+authors="Paul Methfessel"
+description='''
+Build models in Minecraft and export it to Kyub.
+Kyub is a 3D-Editor for Lasercutting
+'''
