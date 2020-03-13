@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "kyubcraft:block/block_plywood"
+      }
+    ]
+  }
+}
