@@ -3,8 +3,9 @@
 Build what you want in Minecraft and export it to [Kyub](https://kyub.com/).
 
 ### Installation
-1. Install Forge
-2. Drop the Mods Zip into the `mods/` folder
+1. Install [Forge for Minecraft 1.15.1](http://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.15.1.html)
+2. Go to [Releases](https://github.com/Paulpanther/kyubcraft/releases) and download the latest version of KyubCraft (The `.jar`-file)
+3. Drag the `.jar`-file into `C:\Users\<yourusername>\AppData\Roaming\.minecraft\mods`
 
 ### Usage
 A new Block called *Plywood* can be found under the *Kyub* Tab in the Creative Inventory.
