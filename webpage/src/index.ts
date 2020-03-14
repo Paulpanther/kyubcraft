@@ -1,4 +1,4 @@
-import {Mesh, BoxGeometry, Geometry, Vector3} from 'three';
+import {BoxGeometry, Geometry, Mesh, Vector3} from 'three';
 import {saveAs} from 'file-saver';
 import * as exportSTL from 'threejs-export-stl';
 
@@ -17,15 +17,18 @@ function toBoxes(encoded: string): Geometry[] {
             // Swap y and z because minecraft has a "special" system
             return new Vector3(numbers[0], numbers[2], numbers[1]);
         });
-    const boxes = points.map(point => {
+    const center = points
+        .reduce((sum, current) => sum.add(current), new Vector3())
+        .divideScalar(points.length);
+
+    // Move the center of mass to origin
+    const centeredPoints = points.map(point => point.sub(center));
+    return centeredPoints.map(point => {
         const box = new BoxGeometry(1, 1, 1);
         box.translate(point.x, point.y, point.z);
         box.scale(SCALE, SCALE, SCALE);
         return box;
     });
-    // const center = boxes
-    //     .reduce((prev, current) => prev.clone().add(current.center()), new Vector3());
-    return boxes;
 }
 
 function mergeIntoMesh(boxes: Geometry[]): Mesh {
