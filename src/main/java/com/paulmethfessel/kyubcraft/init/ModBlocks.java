@@ -7,6 +7,5 @@ import net.minecraftforge.registries.ObjectHolder;
 
 @ObjectHolder(KyubCraft.MODID)
 public class ModBlocks {
-    public static final Block BLOCK_PLYWOOD = new BlockPlywood();
-
+    public static final BlockPlywood BLOCK_PLYWOOD = new BlockPlywood();
 }
