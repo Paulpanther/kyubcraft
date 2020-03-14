@@ -44,7 +44,7 @@ public class BlockPlywood extends Block {
         List<Item> inHand = new ArrayList<>();
         player.getHeldEquipment().forEach(stack -> inHand.add(stack.getItem()));
 
-        if (!world.isRemote && inHand.contains(ModItems.ITEM_KYUB)) {
+        if (!world.isRemote && hand == Hand.MAIN_HAND && inHand.get(0) == ModItems.ITEM_KYUB) {
             List<BlockPos> positions = findConnected(world, pos);
             URLMessageSender.encodeAndSend(player, positions);
         }
