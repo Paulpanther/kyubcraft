@@ -8,7 +8,7 @@ import java.util.List;
 
 public class URLMessageSender {
 
-    public static final String BASE_URL = "https://paulmethfessel.com/kyubcraft/convert/index.html#";
+     public static final String BASE_URL = "https://paulmethfessel.com/kyubcraft#";
 
     public static void encodeAndSend(PlayerEntity player, List<BlockPos> positions) {
         String url = encode(positions);
