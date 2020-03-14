@@ -3,6 +3,7 @@ package com.paulmethfessel.kyubcraft;
 import com.paulmethfessel.kyubcraft.init.ModBlocks;
 import com.paulmethfessel.kyubcraft.init.ModItemGroup;
 import com.paulmethfessel.kyubcraft.init.ModItems;
+import com.paulmethfessel.kyubcraft.util.OwnSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -51,25 +52,26 @@ public class BlockPlywood extends Block {
     }
 
     private static List<BlockPos> findConnected(World world, BlockPos pos) {
-        return new ArrayList<>(findConnected(world, pos, new HashSet<>()));
+        return new ArrayList<>(findConnected(world, pos, new OwnSet<>()));
     }
 
-    private static Set<BlockPos> findConnected(World world, BlockPos pos, Set<BlockPos> found) {
-        Set<BlockPos> newFound = new HashSet<>(found);
+    private static Set<BlockPos> findConnected(World world, BlockPos pos, Set<BlockPos> pastFound) {
+        Set<BlockPos> newFound = new OwnSet<>();
+
+        if (world.getBlockState(pos).getBlock() != ModBlocks.BLOCK_PLYWOOD)
+            return newFound;
+
         newFound.add(pos);
 
         for (BlockPos neighborPos : getNeighbors(pos)) {
             BlockState neighbor = world.getBlockState(neighborPos);
-            if (neighbor.getBlock() == ModBlocks.BLOCK_PLYWOOD &&
-                    newFound.stream().noneMatch(currentPos -> currentPos.equals(neighborPos))) {
-                newFound.addAll(findConnected(world, neighborPos, newFound));
+            if (neighbor.getBlock() == ModBlocks.BLOCK_PLYWOOD
+                    && !newFound.contains(neighborPos)
+                    && !pastFound.contains(neighborPos)) {
+                newFound.addAll(findConnected(world, neighborPos, OwnSet.concat(newFound, pastFound)));
             }
         }
         return newFound;
-    }
-
-    private static boolean blockPositionsEqual(BlockPos p1, BlockPos p2) {
-        return p1.getX() == p2.getX() && p1.getY() == p2.getY() && p1.getZ() == p2.getZ();
     }
 
     private static BlockPos[] getNeighbors(BlockPos pos) {
@@ -79,7 +81,7 @@ public class BlockPlywood extends Block {
                 pos.add(0, 1, 0),
                 pos.add(0, -1, 0),
                 pos.add(1, 0, 0),
-                pos.add(1, 0, 0),
+                pos.add(-1, 0, 0),
         };
     }
 }
