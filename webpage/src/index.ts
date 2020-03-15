@@ -6,15 +6,19 @@ import * as exportSTL from 'threejs-export-stl';
 // 1 = 1mm
 const SCALE = 100;
 
+function decode(base64message: string): string {
+    return Buffer.from(base64message, 'base64').toString('hex');
+}
+
 function toBoxes(encoded: string): Geometry[] {
     const points = encoded
-        .split(';')  // Get separate points
-        .map(point => point.split('.'))  // Split coordinates of point
+        .split('b')  // Get separate points
+        .map(point => point.split('a'))  // Split coordinates of point
         .filter(point => point.length === 3
             && point.every(number => !isNaN(Number(number)) && number !== ''))  // Check point is valid
         .map(point => {
             const numbers = point.map(Number);
-            // Swap y and z because minecraft has a "special" system
+            // Swap y and z because minecraft
             return new Vector3(numbers[0], numbers[2], numbers[1]);
         });
     const center = points
@@ -48,7 +52,8 @@ function showSavePrompt(mesh: Mesh) {
 }
 
 if (window.location.hash) {
-    const encoded = window.location.hash.substr(1);
+    const encodedShort = window.location.hash.substr(1);
+    const encoded = decode(encodedShort);
     const boxes = toBoxes(encoded);
     const mesh = mergeIntoMesh(boxes);
     showSavePrompt(mesh);
