@@ -1,6 +1,44 @@
+$text-color: #e3e3e3
+
 body
+  font-family: Roboto, sans-serif
   margin: 0
 
 canvas
+  display: block
   width: 100%
   height: 100vh
+  background: #000
+
+.overlay
+  position: fixed
+  width: 100%
+  height: 100vh
+  top: 0
+  left: 0
+
+  #save
+    display: none
+
+    position: fixed
+    bottom: 8vh
+    left: 50%
+
+    padding: .1em 1em .2em
+
+    background: #000
+    color: $text-color
+    font-size: 2.4em
+    text-align: center
+
+    border: .1em solid $text-color
+    border-radius: .1em
+
+    cursor: pointer
+    user-select: none
+
+    transition: background ease .4s, color ease .4s
+
+    &:active
+      color: #000
+      background: $text-color

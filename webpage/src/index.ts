@@ -42,7 +42,7 @@ const centerVoxelsAtOrigin = (voxels: Vector3[]): void => {
 const toThreeMesh = (voxels: Vector3[]): Mesh => {
     const {vertices, normals, indices} = voxelToMesh(voxels);
     const geometry = new BufferGeometry();
-    const material = new MeshLambertMaterial({color: 'green'});
+    const material = new MeshLambertMaterial({color: 0xFFFFFF});
 
     geometry.setAttribute(
         'position',
@@ -63,12 +63,26 @@ function showSavePrompt(mesh: Mesh) {
     saveAs(blob, 'kyub.stl');
 }
 
+const save = document.getElementById("save");
+
+let mesh: Mesh = null;
+
 if (window.location.hash) {
     const encodedShort = window.location.hash.substr(1);
     const decoded = decode(encodedShort);
     const voxels = deserializeVoxels(decoded);
     centerVoxelsAtOrigin(voxels);
-    const mesh = toThreeMesh(voxels);
+    mesh = toThreeMesh(voxels);
     drawMesh(mesh);
-    // showSavePrompt(mesh);
+    save.style.display = "block";
 }
+
+window.addEventListener("hashchange", () => {
+    window.location.reload();
+});
+
+save.addEventListener("click", () => {
+    if (mesh) {
+        showSavePrompt(mesh);
+    }
+});
