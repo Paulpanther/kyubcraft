@@ -1,6 +1,15 @@
-import {BoxGeometry, Geometry, Mesh, Vector3} from 'three';
+import {
+    BufferAttribute,
+    BufferGeometry,
+    Matrix4,
+    Mesh,
+    MeshLambertMaterial,
+    Vector3
+} from 'three';
 import {saveAs} from 'file-saver';
 import * as exportSTL from 'threejs-export-stl';
+import voxelToMesh from './voxelToMesh';
+import drawMesh from './drawMesh';
 
 // Object needs to be scaled for Kyub
 // 1 = 1mm
@@ -10,39 +19,42 @@ function decode(base64message: string): string {
     return Buffer.from(base64message, 'base64').toString('hex');
 }
 
-function toBoxes(encoded: string): Geometry[] {
-    const points = encoded
+const deserializeVoxels = (encoded: string): Vector3[] => {
+    return encoded
         .split('b')  // Get separate points
         .map(point => point.split('a'))  // Split coordinates of point
         .filter(point => point.length === 3
             && point.every(number => !isNaN(Number(number)) && number !== ''))  // Check point is valid
         .map(point => {
             const numbers = point.map(Number);
-            // Swap y and z because minecraft
-            return new Vector3(numbers[0], numbers[2], numbers[1]);
+            return new Vector3(numbers[0], numbers[1], numbers[2]);
         });
-    const center = points
+};
+
+const centerVoxelsAtOrigin = (voxels: Vector3[]): void => {
+    const center = voxels
         .reduce((sum, current) => sum.add(current), new Vector3())
-        .divideScalar(points.length);
+        .divideScalar(voxels.length)
+        .round();
+    voxels.forEach(point => point.sub(center));
+};
 
-    // Move the center of mass to origin
-    const centeredPoints = points.map(point => point.sub(center));
-    return centeredPoints.map(point => {
-        const box = new BoxGeometry(1, 1, 1);
-        box.translate(point.x, point.y, point.z);
-        box.scale(SCALE, SCALE, SCALE);
-        return box;
-    });
-}
+const toThreeMesh = (voxels: Vector3[]): Mesh => {
+    const {vertices, normals, indices} = voxelToMesh(voxels);
+    const geometry = new BufferGeometry();
+    const material = new MeshLambertMaterial({color: 'green'});
 
-function mergeIntoMesh(boxes: Geometry[]): Mesh {
-    const allGeometry = new Geometry();
-    for (const box of boxes) {
-        allGeometry.mergeMesh(new Mesh(box));
-        allGeometry.mergeVertices();
-    }
-    return new Mesh(allGeometry);
-}
+    geometry.setAttribute(
+        'position',
+        new BufferAttribute(new Float32Array(vertices), 3));
+    geometry.setAttribute(
+        'normal',
+        new BufferAttribute(new Float32Array(normals), 3));
+    geometry.setIndex(indices);
+    const mesh = new Mesh(geometry, material);
+    mesh.applyMatrix4(new Matrix4().scale(new Vector3(SCALE, SCALE, SCALE)));
+    return mesh;
+};
 
 function showSavePrompt(mesh: Mesh) {
     const buffer = exportSTL.fromMesh(mesh, false);
@@ -53,8 +65,10 @@ function showSavePrompt(mesh: Mesh) {
 
 if (window.location.hash) {
     const encodedShort = window.location.hash.substr(1);
-    const encoded = decode(encodedShort);
-    const boxes = toBoxes(encoded);
-    const mesh = mergeIntoMesh(boxes);
-    showSavePrompt(mesh);
+    const decoded = decode(encodedShort);
+    const voxels = deserializeVoxels(decoded);
+    centerVoxelsAtOrigin(voxels);
+    const mesh = toThreeMesh(voxels);
+    drawMesh(mesh);
+    // showSavePrompt(mesh);
 }
