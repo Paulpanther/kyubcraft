@@ -74,7 +74,6 @@ if (window.location.hash) {
     centerVoxelsAtOrigin(voxels);
     mesh = toThreeMesh(voxels);
     drawMesh(mesh);
-    save.style.display = "block";
 }
 
 window.addEventListener("hashchange", () => {

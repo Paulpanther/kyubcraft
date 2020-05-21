@@ -1,6 +1,23 @@
 #post-import
     canvas#c
-    .overlay
-        #save Save
+    h2 How to import into Kyub
+    ol
+        li <a id="save">Save</a> the Model to your computer
+        li Go to <a href="https://kyub.com">Kyub</a> and log in
+        li Open or create a new Model
+        li
+            | Select
+            | <strong>boxels</strong>
+            | <img class="icon" src="assets/boxel.png">
+            | and then
+            | <strong>load model</strong>
+            | <img class="icon" src="assets/load.png">
+        li Open the Model from your computer
+        li Select the correct scaling
+        li Done
+    .gallery
+        div: img(src="assets/example4.png" alt="Load the Model from your computer")
+        div: img(src="assets/example5.png" alt="Scale it to the correct size")
+        div: img(src="assets/example6.png" alt="The Model finished importing")
 
 script(src="scripts/import.ts")

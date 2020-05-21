@@ -1,5 +1,5 @@
 import {
-    Box3,
+    Box3, Color,
     DirectionalLight, Matrix4,
     Mesh,
     PerspectiveCamera,
@@ -8,9 +8,10 @@ import {
 } from 'three';
 
 const canvas = document.getElementById("c") as HTMLCanvasElement;
-const renderer = new WebGLRenderer({canvas});
+const renderer = new WebGLRenderer({canvas, alpha: true});
 const camera = new PerspectiveCamera(75, 2, 0.1, 5);
-camera.position.z = 2;
+camera.position.set(0, .3, 1.2);
+camera.rotateX(-0.25);
 const light = new DirectionalLight(0xFFFFFF, 1);
 light.position.set(-1, 2, 4);
 

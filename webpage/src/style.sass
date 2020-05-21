@@ -65,6 +65,7 @@ main
   a
     text-decoration: none
     color: #008000
+    cursor: pointer
 
   code
     background: #eee
@@ -77,15 +78,14 @@ main
     width: 1em
 
   .gallery
-    display: flex
-    flex-direction: row
-    justify-content: space-between
+    display: grid
+    grid-template-columns: 1fr 1fr 1fr
+    grid-column-gap: 1em
 
     margin-top: 2em
 
     div
       position: relative
-      margin: 0 1em
 
       background: #000
       border: .1em solid black
@@ -131,3 +131,8 @@ main
 
       &:hover:after
         opacity: 1
+
+  canvas
+    display: block
+    width: 100%
+    background: #00000000
