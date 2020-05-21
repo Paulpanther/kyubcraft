@@ -5,9 +5,15 @@ html(lang="en")
         meta(name="viewport" content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet" href="style.sass")
         title KyubCraft
-    body
-        canvas#c
-        .overlay
-            #save Save
-
-    script(src="index.ts")
+    body.in-preview
+        main
+            h1 KyubCraft
+            span Export Minecraft structures to Kyub
+            include pages/postImport
+            include pages/preImport
+        #preview
+            div
+                img
+                span
+        script(src="scripts/switchPage.ts")
+        script(src="scripts/showGallery.ts")
