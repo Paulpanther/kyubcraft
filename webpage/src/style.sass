@@ -46,6 +46,7 @@ main
   width: 40em
   max-width: 100%
   margin: 0 auto
+  counter-reset: li
 
   h1
     font-size: 3em
@@ -56,6 +57,22 @@ main
     position: relative
     top: -0.4em
     margin-left: .2em
+
+  li
+    counter-increment: li
+    display: list-item
+    padding-left: 0.4em
+
+    &::marker
+      display: list-item
+      content: counter(li) ". "
+
+  #file-upload-li
+    &::marker
+      content: "(" counter(li) ".)"
+
+    input
+      margin-left: 0.5em
 
   .logo
     display: block
