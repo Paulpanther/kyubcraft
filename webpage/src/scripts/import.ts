@@ -56,6 +56,12 @@ const toThreeMesh = (voxels: Vector3[]): Mesh => {
     return mesh;
 };
 
+export function showVoxels(voxels: Vector3[]) {
+    centerVoxelsAtOrigin(voxels);
+    mesh = toThreeMesh(voxels);
+    drawMesh(mesh);
+}
+
 function showSavePrompt(mesh: Mesh) {
     const buffer = exportSTL.fromMesh(mesh, false);
     const blob = new Blob([buffer], {type: exportSTL.mimeType});
@@ -71,9 +77,7 @@ if (window.location.hash) {
     const encodedShort = window.location.hash.substr(1);
     const decoded = decode(encodedShort);
     const voxels = deserializeVoxels(decoded);
-    centerVoxelsAtOrigin(voxels);
-    mesh = toThreeMesh(voxels);
-    drawMesh(mesh);
+    showVoxels(voxels);
 }
 
 window.addEventListener("hashchange", () => {
